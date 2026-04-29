@@ -41,20 +41,22 @@ const services = [
 
 const testimonials = [
   {
-    name: "Marko Stojković",
-    text: "A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive.",
-    logo: "https://www.figma.com/api/mcp/asset/1bffd6ac-6234-417f-8756-d6e7b1eb11be",
-    rotation: -6.85,
-    left: 102,
-    top: 142,
-  },
-  {
     name: "Lukas Weber",
     text: "Professional, precise, and incredibly fast at handling complex product visualizations and templates.",
     logo: "https://www.figma.com/api/mcp/asset/859665a0-0db3-4b53-9e40-e82b135a3ebf",
     rotation: 2.9,
     left: 676,
     top: 272,
+    behindText: true,  // Figma: this card is below the heading in layer order
+  },
+  {
+    name: "Marko Stojković",
+    text: "A brilliant creative partner who transformed our vision into a unique, high-impact brand identity. Their ability to craft everything from custom mascots to polished logos is truly impressive.",
+    logo: "https://www.figma.com/api/mcp/asset/1bffd6ac-6234-417f-8756-d6e7b1eb11be",
+    rotation: -6.85,
+    left: 102,
+    top: 142,
+    behindText: false,
   },
   {
     name: "Sarah Jenkins",
@@ -63,6 +65,7 @@ const testimonials = [
     rotation: 2.23,
     left: 305,
     top: 553,
+    behindText: false,
   },
   {
     name: "Sofia Martínez",
@@ -71,6 +74,7 @@ const testimonials = [
     rotation: -4.15,
     left: 987,
     top: 546,
+    behindText: false,
   },
 ];
 
@@ -675,56 +679,59 @@ export default function Home() {
     </section>
 
     {/* Testimonials Section */}
-    {/*
-      Desktop: giant centered "Testimonials" heading, 4 cards absolutely scattered
-      around/over it at specific rotations matching the Figma layout.
-      Mobile: title at top, cards in a horizontal scroll strip below.
-    */}
-    {/*
-      All sizes and positions are expressed as vw fractions of the 1440px Figma frame,
-      so the layout is pixel-perfect at 1440px and scales proportionally at any width.
-      Formula: value_px / 1440 * 100 = vw
-    */}
-    <section className="relative overflow-hidden py-16 px-4 md:px-0 md:py-[8.33vw] md:min-h-[62.5vw] md:flex md:flex-col md:items-center md:justify-center">
 
-      {/* Heading — full width so text-center works correctly */}
+    {/* MOBILE */}
+    <section className="md:hidden px-4 py-16 flex flex-col gap-8">
       <h2
-        className="capitalize font-medium not-italic text-black leading-[0.8]
-                   text-[64px] tracking-[-0.07em] px-4
-                   md:text-[13.75vw] md:leading-[1.1] md:text-center md:w-full md:px-0"
+        className="capitalize font-medium not-italic text-black text-[64px] leading-[0.8] tracking-[-4.48px] text-center w-full"
         style={interStyle}
       >
         Testimonials
       </h2>
-
-      {/* Mobile: horizontal scroll strip */}
-      <div className="md:hidden mt-8 -mx-4 overflow-x-auto flex gap-4 px-4 pb-2">
+      <div className="-mx-4 overflow-x-auto flex items-center pb-2">
         {testimonials.map((t, i) => (
           <div
             key={t.name}
-            className="shrink-0"
+            className="shrink-0 -mr-[10px]"
             style={{ transform: `rotate(${i % 2 === 0 ? -3.5 : 2}deg)` }}
           >
             <TestimonialCard logo={t.logo} text={t.text} name={t.name} className="w-[260px]" />
           </div>
         ))}
       </div>
+    </section>
 
-      {/* Desktop: absolutely positioned scattered cards — all values in vw */}
+    {/* DESKTOP */}
+    {/*
+      Section height = 900px at 1440px (62.5vw), matching the Figma frame exactly.
+      Inner container fills section and uses flex justify-center to center h2 with py-[8.33vw] (=120px at 1440px) padding.
+      Cards are absolutely positioned using px values divided by 1440 for vw scaling.
+    */}
+    <section className="hidden md:block relative h-[62.5vw] overflow-hidden">
+      {/* Flex centering shell — matches Figma's flex+justify-center+py-[120px] */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center py-[8.33vw] px-[2.22vw]">
+        <h2
+          className="capitalize font-medium not-italic text-black text-[13.75vw] leading-[1.1] tracking-[-0.07em] text-center w-full"
+          style={{ ...interStyle, zIndex: 1, position: "relative" }}
+        >
+          Testimonials
+        </h2>
+      </div>
+      {/* Absolutely positioned cards — positions from Figma (px / 1440 * 100 = vw) */}
       {testimonials.map((t) => (
         <div
           key={t.name}
-          className="hidden md:block absolute"
+          className="absolute"
           style={{
             left: `${(t.left / 1440 * 100).toFixed(2)}vw`,
             top: `${(t.top / 1440 * 100).toFixed(2)}vw`,
             transform: `rotate(${t.rotation}deg)`,
+            zIndex: t.behindText ? 0 : 2,
           }}
         >
           <TestimonialCard logo={t.logo} text={t.text} name={t.name} className="w-[24.51vw]" />
         </div>
       ))}
-
     </section>
     </>
   );

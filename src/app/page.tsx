@@ -64,7 +64,7 @@ const testimonials = [
     logo: "https://www.figma.com/api/mcp/asset/9640f659-79ed-40c3-b6fc-e6fec0552fb7",
     rotation: 2.23,
     left: 305,
-    top: 490,
+    top: 539,
     behindText: false,
   },
   {
@@ -73,7 +73,7 @@ const testimonials = [
     logo: "https://www.figma.com/api/mcp/asset/d01fb03e-994a-4dd3-a86f-171cbbd4348b",
     rotation: -4.15,
     left: 987,
-    top: 475,
+    top: 523,
     behindText: false,
   },
 ];
@@ -333,7 +333,11 @@ export default function Home() {
       */}
       <div
         className="hidden md:block absolute inset-x-0 h-[349px] backdrop-blur-[5px] bg-[rgba(217,217,217,0.01)]"
-        style={{ top: "58.7vh" }}
+        style={{
+          top: "58.7vh",
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
+        }}
       />
 
       {/*

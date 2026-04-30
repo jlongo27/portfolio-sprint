@@ -1,7 +1,7 @@
 import NavBar from "./NavBar";
 
 const bgDesktop =
-  "https://www.figma.com/api/mcp/asset/8421e35e-c87b-451d-b656-88bd33b3967a";
+  "https://www.figma.com/api/mcp/asset/8e2afe22-0ea0-4139-9bb4-5f4aaf2f13f0";
 const bgMobile =
   "https://www.figma.com/api/mcp/asset/9d9a8c39-8f1f-49c3-8fde-d8e3c3d25973";
 
@@ -46,7 +46,7 @@ const testimonials = [
     logo: "https://www.figma.com/api/mcp/asset/859665a0-0db3-4b53-9e40-e82b135a3ebf",
     rotation: 2.9,
     left: 676,
-    top: 272,
+    top: 220,
     behindText: true,  // Figma: this card is below the heading in layer order
   },
   {
@@ -64,7 +64,7 @@ const testimonials = [
     logo: "https://www.figma.com/api/mcp/asset/9640f659-79ed-40c3-b6fc-e6fec0552fb7",
     rotation: 2.23,
     left: 305,
-    top: 553,
+    top: 490,
     behindText: false,
   },
   {
@@ -73,7 +73,7 @@ const testimonials = [
     logo: "https://www.figma.com/api/mcp/asset/d01fb03e-994a-4dd3-a86f-171cbbd4348b",
     rotation: -4.15,
     left: 987,
-    top: 546,
+    top: 475,
     behindText: false,
   },
 ];
@@ -102,6 +102,21 @@ const portfolioProjects = [
     tags: ["Social Media", "Photography"],
     img: "https://www.figma.com/api/mcp/asset/61e9ab2d-7931-4861-bf88-b3db890734d6",
     tall: true,
+  },
+];
+
+const newsItems = [
+  {
+    img: "https://www.figma.com/api/mcp/asset/a1cc8045-2aeb-4fcc-b48a-02cda4c90b62",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
+  {
+    img: "https://www.figma.com/api/mcp/asset/c13fad28-b341-4cd0-a8a3-b7b96f631414",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
+  {
+    img: "https://www.figma.com/api/mcp/asset/4783974d-7f84-4fa3-b027-e862963c2770",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
 ];
 
@@ -259,6 +274,12 @@ export default function Home() {
         constant independent of how wide (and therefore how tall) the image
         renders via object-cover.
       */}
+      {/*
+        Desktop background.
+        Full-viewport container bleeds ~35% left/right so the image fills edge-to-edge.
+        object-cover + objectPosition "center 30%" keeps the face at ~30% from the top
+        at any viewport width — face stays below the navbar and above the H1 text.
+      */}
       <div
         className="absolute hidden md:block pointer-events-none"
         style={{
@@ -272,7 +293,7 @@ export default function Home() {
           src={bgDesktop}
           alt=""
           className="w-full h-full object-cover"
-          style={{ objectPosition: "center 25%" }}
+          style={{ objectPosition: "center 30%" }}
         />
       </div>
 
@@ -294,18 +315,25 @@ export default function Home() {
         />
       </div>
 
+      {/* Mobile frosted glass — bottom-anchored, no mask (matches Figma) */}
+      <div
+        className="md:hidden absolute inset-x-0 h-[349px] backdrop-blur-[5px] bg-[rgba(217,217,217,0.01)] bottom-0"
+        style={{
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
+        }}
+      />
+
       {/*
-        Frosted glass strip.
-        mask-image fades it out upward so the top edge dissolves rather than cuts hard.
-        Position: bottom on mobile, mid-page on desktop.
+        Desktop frosted glass.
+        Figma positions this at top-[498px] in an 849px frame = 58.7vh.
+        Sibling of the content div so content (NavBar, H1, description) paints
+        after it in DOM order → description text appears crisp on top of the blur.
+        No mask — Figma has no mask on this element.
       */}
       <div
-        className="absolute inset-x-0 h-[349px] backdrop-blur-[10px] bg-[rgba(217,217,217,0.01)] bottom-0"
-        style={{
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 35%)",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, black 35%)",
-        }}
+        className="hidden md:block absolute inset-x-0 h-[349px] backdrop-blur-[5px] bg-[rgba(217,217,217,0.01)]"
+        style={{ top: "58.7vh" }}
       />
 
       {/*
@@ -313,7 +341,7 @@ export default function Home() {
         Without a new stacking context, mix-blend-overlay on the h1 composites
         against the background image rendered in main's stacking context.
       */}
-      <div className="relative h-full flex flex-col px-8 pb-6 max-md:px-4 max-md:pb-6 md:gap-[calc(40vh_-_72px)] max-md:gap-[calc(40vh_-_72px)]">
+      <div className="relative h-full flex flex-col px-8 pb-6 max-md:px-4 max-md:pb-6 md:gap-[240px] max-md:gap-[calc(40vh_-_72px)]">
         <NavBar />
 
         {/*
@@ -345,6 +373,7 @@ export default function Home() {
               <span className="hidden md:inline">&nbsp;&nbsp;&nbsp;</span>
               <span className="block md:inline">Specter</span>
             </h1>
+
           </div>
 
           {/* Description + CTA */}
@@ -733,6 +762,213 @@ export default function Home() {
         </div>
       ))}
     </section>
+
+    {/* News / Latest Section */}
+    <section className="bg-[#f3f3f3]">
+
+      {/* MOBILE */}
+      <div className="md:hidden px-4 py-16 flex flex-col gap-8">
+        <h2
+          className="uppercase font-light not-italic text-black text-[32px] leading-[0.86] tracking-[-2.56px]"
+          style={interStyle}
+        >
+          Keep up with my latest news &amp; achievements
+        </h2>
+        <div className="-mx-4 overflow-x-auto flex gap-4 px-4 pb-2">
+          {newsItems.map((item, i) => (
+            <div key={i} className="shrink-0 w-[300px] flex flex-col gap-4">
+              <div className="relative w-full h-[398px] overflow-hidden shrink-0">
+                <img src={item.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+              <p className="text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.56px] not-italic" style={interStyle}>
+                {item.text}
+              </p>
+              <a href="#" className="inline-flex gap-[10px] items-center border-b border-black pb-1 overflow-hidden">
+                <span className="text-[14px] font-medium text-black tracking-[-0.56px] whitespace-nowrap" style={interStyle}>Read more</span>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden className="-rotate-90 shrink-0">
+                  <path d="M4.5 13.5L13.5 4.5M13.5 4.5H7.5M13.5 4.5V10.5" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* DESKTOP */}
+      {/*
+        Left column: 110×706px container with title rotated -90deg (reads bottom-to-top).
+        Right area: 3 news cards with vertical dividers. Middle card offset 120px down via pt-[120px].
+        justify-between distributes the 246px gap between title and cards.
+      */}
+      <div className="hidden md:flex items-end justify-between px-8 py-[120px]">
+        {/* Rotated title */}
+        <div className="relative shrink-0 w-[110px] h-[706px] flex items-center justify-center overflow-hidden">
+          <div className="-rotate-90 flex-none">
+            <div className="flex flex-col uppercase font-light not-italic text-black text-[64px] leading-[0.86] tracking-[-5.12px] whitespace-nowrap" style={interStyle}>
+              <span>Keep up with my latest</span>
+              <span>news &amp; achievements</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Cards row — 3 equal columns with vertical dividers */}
+        <div className="flex items-start w-[1020px]">
+          {newsItems.map((item, i) => (
+            <div key={i} className="contents">
+              {i > 0 && <div className="self-stretch w-px bg-black shrink-0" />}
+              <div className={`flex-1 flex flex-col gap-4 ${i === 1 ? "pt-[120px] px-[31px]" : i === 0 ? "pr-[31px]" : "pl-[31px]"}`}>
+                <div className="relative w-full h-[469px] overflow-hidden shrink-0">
+                  <img src={item.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                </div>
+                <p className="flex-1 text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.56px] not-italic" style={interStyle}>
+                  {item.text}
+                </p>
+                <a href="#" className="inline-flex gap-[10px] items-center border-b border-black pb-1 overflow-hidden">
+                  <span className="text-[14px] font-medium text-black tracking-[-0.56px] whitespace-nowrap" style={interStyle}>Read more</span>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden className="-rotate-90 shrink-0">
+                    <path d="M4.5 13.5L13.5 4.5M13.5 4.5H7.5M13.5 4.5V10.5" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </section>
+
+    {/* Footer */}
+    {/*
+      Mobile (1-492): bg-black, pt-48px px-16px, column layout.
+        Top: CTA phrase + Let's talk button + 4 social links + horizontal divider.
+        Bottom: legal links (centered) + [ Coded By Claude ] + giant H.Studio text.
+      Desktop: 2-column top (CTA+button left, social links right), then divider,
+        then legal row, then full-width H.Studio.
+      H.Studio font size: 91.425px / 375px mobile = 24.38vw scales proportionally.
+    */}
+    <footer className="bg-black overflow-hidden">
+
+      {/* ── MOBILE ── */}
+      <div className="md:hidden px-4 pt-12 flex flex-col gap-12">
+
+        {/* CTA + social + divider */}
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 w-[298px]">
+              <p
+                className="text-white text-[24px] font-light italic leading-[1.1] tracking-[-0.96px] uppercase"
+                style={interStyle}
+              >
+                Have a{" "}
+                <span className="font-black not-italic">project</span>
+                {" "}in mind?
+              </p>
+              <a
+                href="#"
+                className="self-start border border-white text-white text-[14px] font-medium tracking-[-0.56px] px-4 py-3 rounded-full whitespace-nowrap"
+                style={interStyle}
+              >
+                Let&apos;s talk
+              </a>
+            </div>
+            {["Facebook", "Instagram", "X.com", "LinkedIn"].map((link) => (
+              <a
+                key={link}
+                href="#"
+                className="text-white text-[18px] font-normal leading-[1.1] tracking-[-0.72px] uppercase"
+                style={interStyle}
+              >
+                {link}
+              </a>
+            ))}
+          </div>
+          <hr className="border-t border-white w-full m-0" />
+        </div>
+
+        {/* Legal + branding */}
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-[34px] items-center justify-center pb-8">
+            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Licences</a>
+            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Privacy Policy</a>
+          </div>
+          <div className="flex flex-col gap-3">
+            <span className="text-white text-[10px] uppercase leading-[1.1]" style={monoStyle}>[ Coded By Claude ]</span>
+            <p className="text-white font-semibold capitalize leading-[0.8] tracking-[-0.06em] text-[24.38vw]" style={interStyle}>
+              H.Studio
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── DESKTOP ── */}
+      <div className="hidden md:flex flex-col px-8 pt-16">
+
+        {/* Top row: CTA | Facebook+Instagram | X.com+LinkedIn */}
+        <div className="flex items-start justify-between pb-12">
+          <div className="flex flex-col gap-4">
+            <p
+              className="text-white text-[24px] font-light italic leading-[1.1] tracking-[-0.96px] uppercase"
+              style={interStyle}
+            >
+              Have a{" "}
+              <span className="font-black not-italic">project</span>
+              {" "}in mind?
+            </p>
+            <a
+              href="#"
+              className="self-start border border-white text-white text-[14px] font-medium tracking-[-0.56px] px-4 py-3 rounded-full whitespace-nowrap"
+              style={interStyle}
+            >
+              Let&apos;s talk
+            </a>
+          </div>
+          <div className="flex flex-col gap-3">
+            {["Facebook", "Instagram"].map((link) => (
+              <a key={link} href="#" className="text-white text-[18px] font-normal leading-[1.1] tracking-[-0.72px] uppercase hover:opacity-60 transition-opacity" style={interStyle}>
+                {link}
+              </a>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3">
+            {["X.com", "LinkedIn"].map((link) => (
+              <a key={link} href="#" className="text-white text-[18px] font-normal leading-[1.1] tracking-[-0.72px] uppercase hover:opacity-60 transition-opacity" style={interStyle}>
+                {link}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <hr className="border-t border-white w-full m-0" />
+
+        {/* Bottom: rotated label | H.Studio | legal pinned bottom-right */}
+        <div className="relative flex items-end pt-6">
+          {/* [ CODED BY CLAUDE ] rotated -90deg, reads bottom-to-top */}
+          <div className="shrink-0 w-20 self-stretch flex items-center justify-center">
+            <span
+              className="-rotate-90 whitespace-nowrap text-white text-[10px] uppercase leading-[1.1]"
+              style={monoStyle}
+            >
+              [ Coded By Claude ]
+            </span>
+          </div>
+          {/* Giant H.Studio */}
+          <p
+            className="text-white font-semibold capitalize leading-[0.8] tracking-[-0.06em] text-[24.38vw]"
+            style={interStyle}
+          >
+            H.Studio
+          </p>
+          {/* Legal links — absolute bottom-right */}
+          <div className="absolute bottom-2 right-0 flex gap-8 items-center">
+            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Licences</a>
+            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Privacy Policy</a>
+          </div>
+        </div>
+
+      </div>
+
+    </footer>
     </>
   );
 }

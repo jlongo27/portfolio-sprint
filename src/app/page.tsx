@@ -1,3 +1,5 @@
+import { sanityFetch } from "@/sanity/lib/live";
+import { PORTFOLIO_QUERY } from "@/sanity/lib/queries";
 import NavBar from "./NavBar";
 
 const bgDesktop =
@@ -260,7 +262,9 @@ function PortfolioCTA({ className = "" }: { className?: string }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const { data: portfolioItems } = await sanityFetch({ query: PORTFOLIO_QUERY });
+
   return (
     <>
     <main className="relative h-screen overflow-hidden">
@@ -685,29 +689,31 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Mobile: single column, cards 1–4 then CTA */}
+      {/* Mobile: single column, all cards then CTA */}
       <div className="flex flex-col gap-6 md:hidden">
-        {portfolioProjects.map((p) => (
-          <PortfolioCard key={p.name} name={p.name} tags={p.tags} img={p.img} tall={p.tall} mobile />
+        {portfolioItems?.map((p) => (
+          <PortfolioCard key={p._id} name={p.title ?? ""} tags={p.categories ?? []} img={p.coverImageUrl ?? ""} tall={p.tall ?? false} mobile />
         ))}
         <PortfolioCTA className="w-full" />
       </div>
 
       {/* Desktop: 2-column staggered masonry */}
-      <div className="hidden md:flex items-end gap-6 w-full">
-        {/* Left column: self-stretch so it matches right column height, then justify-between
-            distributes Card1, Card2, and CTA evenly — matching Figma's justify-between layout */}
-        <div className="flex-1 self-stretch flex flex-col justify-between">
-          <PortfolioCard name={portfolioProjects[0].name} tags={portfolioProjects[0].tags} img={portfolioProjects[0].img} tall={portfolioProjects[0].tall} />
-          <PortfolioCard name={portfolioProjects[1].name} tags={portfolioProjects[1].tags} img={portfolioProjects[1].img} tall={portfolioProjects[1].tall} />
-          <PortfolioCTA className="w-[465px]" />
+      {portfolioItems && portfolioItems.length >= 4 && (
+        <div className="hidden md:flex items-end gap-6 w-full">
+          {/* Left column: self-stretch so it matches right column height, then justify-between
+              distributes Card1, Card2, and CTA evenly — matching Figma's justify-between layout */}
+          <div className="flex-1 self-stretch flex flex-col justify-between">
+            <PortfolioCard name={portfolioItems[0].title ?? ""} tags={portfolioItems[0].categories ?? []} img={portfolioItems[0].coverImageUrl ?? ""} tall={portfolioItems[0].tall ?? false} />
+            <PortfolioCard name={portfolioItems[1].title ?? ""} tags={portfolioItems[1].categories ?? []} img={portfolioItems[1].coverImageUrl ?? ""} tall={portfolioItems[1].tall ?? false} />
+            <PortfolioCTA className="w-[465px]" />
+          </div>
+          {/* Right column: starts 240px lower */}
+          <div className="flex-1 flex flex-col gap-[117px] pt-[240px]">
+            <PortfolioCard name={portfolioItems[2].title ?? ""} tags={portfolioItems[2].categories ?? []} img={portfolioItems[2].coverImageUrl ?? ""} tall={portfolioItems[2].tall ?? false} />
+            <PortfolioCard name={portfolioItems[3].title ?? ""} tags={portfolioItems[3].categories ?? []} img={portfolioItems[3].coverImageUrl ?? ""} tall={portfolioItems[3].tall ?? false} />
+          </div>
         </div>
-        {/* Right column: starts 240px lower, Agency 976, Minimal Playground */}
-        <div className="flex-1 flex flex-col gap-[117px] pt-[240px]">
-          <PortfolioCard name={portfolioProjects[2].name} tags={portfolioProjects[2].tags} img={portfolioProjects[2].img} tall={portfolioProjects[2].tall} />
-          <PortfolioCard name={portfolioProjects[3].name} tags={portfolioProjects[3].tags} img={portfolioProjects[3].img} tall={portfolioProjects[3].tall} />
-        </div>
-      </div>
+      )}
 
     </section>
 

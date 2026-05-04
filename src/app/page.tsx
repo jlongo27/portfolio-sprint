@@ -1,11 +1,17 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { PORTFOLIO_QUERY } from "@/sanity/lib/queries";
-import NavBar from "./NavBar";
-
-const bgDesktop =
-  "https://www.figma.com/api/mcp/asset/8e2afe22-0ea0-4139-9bb4-5f4aaf2f13f0";
-const bgMobile =
-  "https://www.figma.com/api/mcp/asset/9d9a8c39-8f1f-49c3-8fde-d8e3c3d25973";
+import HeroSection from "./HeroSection";
+import TestimonialsSlider from "./TestimonialsSlider";
+import AnimatedButton from "./AnimatedButton";
+import AboutPortrait from "./AboutPortrait";
+import BlurReveal from "./BlurReveal";
+import ScrollDriftLeft from "./ScrollDriftLeft";
+import ServiceItem from "./ServiceItem";
+import PortfolioCard from "./PortfolioCard";
+import TestimonialsDesktop from "./TestimonialsDesktop";
+import FooterReveal from "./FooterReveal";
+import NewsCard from "./NewsCard";
+import Footer from "./Footer";
 
 const aboutPortrait =
   "https://www.figma.com/api/mcp/asset/2a20a424-0066-41c7-ad8b-3788f170f1b5";
@@ -134,102 +140,6 @@ function CornerBracket({ className = "" }: { className?: string }) {
   );
 }
 
-function PortfolioCard({
-  name,
-  tags,
-  img,
-  tall = false,
-  mobile = false,
-}: {
-  name: string;
-  tags: string[];
-  img: string;
-  tall?: boolean;
-  mobile?: boolean;
-}) {
-  const imgH = mobile ? "h-[390px]" : tall ? "h-[744px]" : "h-[699px]";
-  const titleCls = mobile
-    ? "text-[24px] tracking-[-0.96px]"
-    : "text-[36px] tracking-[-1.44px]";
-  return (
-    <div className="flex flex-col gap-[10px] w-full">
-      <div className={`relative w-full overflow-hidden ${imgH} flex flex-col justify-end pb-4 pl-4`}>
-        <img
-          src={img}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        />
-        <div className="relative flex gap-3 items-center flex-wrap">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="backdrop-blur-[10px] bg-[rgba(255,255,255,0.3)] px-2 py-1 rounded-full text-[14px] text-[#111] font-medium tracking-[-0.56px] whitespace-nowrap"
-              style={interStyle}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="flex items-center justify-between w-full">
-        <p
-          className={`font-black not-italic uppercase leading-[1.1] text-black ${titleCls}`}
-          style={interStyle}
-        >
-          {name}
-        </p>
-        <div className="shrink-0 size-[32px]">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <circle cx="16" cy="16" r="15.5" stroke="black" strokeWidth="1" />
-            <path
-              d="M11.5 20.5L20.5 11.5M20.5 11.5H14.5M20.5 11.5V17.5"
-              stroke="black"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function TestimonialCard({
-  logo,
-  text,
-  name,
-  className = "",
-}: {
-  logo: string;
-  text: string;
-  name: string;
-  className?: string;
-}) {
-  return (
-    <div className={`bg-[#f1f1f1] border border-[#ddd] flex flex-col gap-4 p-6 rounded-[4px] ${className}`}>
-      <div className="h-[30px]">
-        <img
-          src={logo}
-          alt=""
-          className="h-full w-auto max-w-[150px] object-contain object-left"
-        />
-      </div>
-      <p
-        className="text-[18px] text-[#1f1f1f] leading-[1.3] tracking-[-0.72px] not-italic"
-        style={interStyle}
-      >
-        {text}
-      </p>
-      <p
-        className="text-[16px] font-black uppercase leading-[1.1] tracking-[-0.64px] text-black whitespace-nowrap"
-        style={interStyle}
-      >
-        {name}
-      </p>
-    </div>
-  );
-}
 
 function PortfolioCTA({ className = "" }: { className?: string }) {
   return (
@@ -246,13 +156,12 @@ function PortfolioCTA({ className = "" }: { className?: string }) {
           Discover how my creativity transforms ideas into impactful digital
           experiences — schedule a call with me to get started.
         </p>
-        <a
-          href="#"
-          className="bg-black text-white text-[14px] font-medium tracking-[-0.56px] px-4 py-3 rounded-full"
+        <AnimatedButton
+          className="text-[14px] font-medium tracking-[-0.56px] px-4 py-3 rounded-full"
           style={interStyle}
         >
           Let&apos;s talk
-        </a>
+        </AnimatedButton>
       </div>
       <div className="flex flex-col justify-between shrink-0">
         <CornerBracket className="rotate-90" />
@@ -267,150 +176,10 @@ export default async function Home() {
 
   return (
     <>
-    <main className="relative h-screen overflow-hidden">
-      {/*
-        Desktop background.
-        Container fills the full viewport height and bleeds ~35% horizontally.
-        object-position "center 20%" keeps the face at a stable distance from
-        the top (≈ 20% × viewport-height) at every viewport width. This works
-        because when objectPosition-y equals the face's position in the image,
-        the face-to-top distance simplifies to objectPosition-y × vh — a
-        constant independent of how wide (and therefore how tall) the image
-        renders via object-cover.
-      */}
-      {/*
-        Desktop background.
-        Full-viewport container bleeds ~35% left/right so the image fills edge-to-edge.
-        object-cover + objectPosition "center 30%" keeps the face at ~30% from the top
-        at any viewport width — face stays below the navbar and above the H1 text.
-      */}
-      <div
-        className="absolute hidden md:block pointer-events-none"
-        style={{
-          left: "-34.79%",
-          right: "-34.79%",
-          top: 0,
-          bottom: 0,
-        }}
-      >
-        <img
-          src={bgDesktop}
-          alt=""
-          className="w-full h-full object-cover"
-          style={{ objectPosition: "center 30%" }}
-        />
-      </div>
-
-      {/* Mobile background — bleeds ~40% beyond right edge */}
-      <div
-        className="absolute md:hidden pointer-events-none"
-        style={{
-          top: "50%",
-          transform: "translateY(-50%)",
-          left: 0,
-          right: "-39.47%",
-          height: "847px",
-        }}
-      >
-        <img
-          src={bgMobile}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      </div>
-
-      {/* Mobile frosted glass — bottom-anchored, no mask (matches Figma) */}
-      <div
-        className="md:hidden absolute inset-x-0 h-[349px] backdrop-blur-[5px] bg-[rgba(217,217,217,0.01)] bottom-0"
-        style={{
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
-          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
-        }}
-      />
-
-      {/*
-        Desktop frosted glass.
-        Figma positions this at top-[498px] in an 849px frame = 58.7vh.
-        Sibling of the content div so content (NavBar, H1, description) paints
-        after it in DOM order → description text appears crisp on top of the blur.
-        No mask — Figma has no mask on this element.
-      */}
-      <div
-        className="hidden md:block absolute inset-x-0 h-[349px] backdrop-blur-[5px] bg-[rgba(217,217,217,0.01)]"
-        style={{
-          top: "58.7vh",
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
-          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
-        }}
-      />
-
-      {/*
-        Content — no z-index so it doesn't create a stacking context.
-        Without a new stacking context, mix-blend-overlay on the h1 composites
-        against the background image rendered in main's stacking context.
-      */}
-      <div className="relative h-full flex flex-col px-8 pb-6 max-md:px-4 max-md:pb-6 md:gap-[240px] max-md:gap-[calc(40vh_-_72px)]">
-        <NavBar />
-
-        {/*
-          flex-1 makes the hero fill the remaining 50vh so justify-between
-          can pin the name to the top and the description/CTA to the bottom,
-          ensuring the Let's talk button is always visible within the viewport.
-        */}
-        <section className="flex flex-col w-full flex-1 justify-between">
-
-          {/* Label + Name */}
-          <div className="flex flex-col w-full">
-            <div className="px-[18px]">
-              <span
-                className="text-white mix-blend-overlay uppercase text-[14px] leading-[1.1]"
-                style={{ fontFamily: "var(--font-geist-mono, monospace)" }}
-              >
-                [ Hello I&apos;m ]
-              </span>
-            </div>
-            {/*
-              Desktop: single line, 13.75vw scales proportionally so it always
-              fits (same ratio as the Figma's 198px / 1440px).
-              Mobile: two block spans break naturally; 25.6vw = 96px at 375px.
-            */}
-            <h1
-              className="text-white mix-blend-overlay capitalize font-medium text-center w-full tracking-[-0.07em] md:text-[13.75vw] md:leading-[1.1] md:whitespace-nowrap text-[25.6vw] leading-[0.8]"
-            >
-              <span className="block md:inline">Harvey</span>
-              <span className="hidden md:inline">&nbsp;&nbsp;&nbsp;</span>
-              <span className="block md:inline">Specter</span>
-            </h1>
-
-          </div>
-
-          {/* Description + CTA */}
-          <div className="flex flex-col md:items-end w-full">
-            <div className="flex flex-col gap-4 items-start max-w-[294px]">
-              <p className="text-[14px] font-bold italic uppercase tracking-[-0.04em] text-[#1f1f1f] leading-[1.1]">
-                H.Studio is a{" "}
-                <span className="font-normal">full-service</span>
-                {" "}creative studio creating beautiful digital experiences and
-                products. We are an{" "}
-                <span className="font-normal">award winning</span>
-                {" "}design and art group specializing in branding, web design
-                and engineering.
-              </p>
-              <a
-                href="#"
-                className="inline-flex items-center bg-black text-white text-sm font-medium tracking-[-0.04em] px-4 py-3 rounded-full"
-              >
-                Let&apos;s talk
-              </a>
-            </div>
-          </div>
-
-        </section>
-      </div>
-    </main>
+    <HeroSection />
 
     {/* Bio / Intro Section */}
-    <section className="flex flex-col items-center justify-center px-4 md:px-8 py-12 md:py-[120px]">
+    <section className="bg-white flex flex-col items-center justify-center px-4 md:px-8 py-12 md:py-[120px]">
       <div className="flex flex-col gap-6 w-full">
 
         {/* Header: label + rule */}
@@ -510,7 +279,7 @@ export default async function Home() {
       the corner-bracketed text box + a flex-row column of (002 | portrait).
       Mobile: full-bleed portrait via negative margin cancelling section px-4.
     */}
-    <section className="px-4 md:pl-8 md:pr-0 py-12 md:py-[80px]">
+    <section className="bg-white px-4 md:pl-8 md:pr-0 py-12 md:py-[80px]">
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
 
         {/* [ About ] label — desktop left column, hidden on mobile */}
@@ -531,13 +300,13 @@ export default async function Home() {
           </div>
 
           {/* Corner-bracketed text box */}
-          <div className="flex items-center gap-3 md:flex-1">
+          <ScrollDriftLeft className="flex items-center gap-3 md:flex-1" from={0} to={-80}>
             <div className="flex flex-col self-stretch justify-between shrink-0">
               <CornerBracket />
               <CornerBracket className="-rotate-90" />
             </div>
             <p
-              className="flex-1 py-3 text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.56px] not-italic"
+              className="flex-1 py-3 text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.56px] not-italic max-md:text-center"
               style={interStyle}
             >
               Placeholder paragraph one. This is where you introduce yourself — your background, your passion for your craft, and what drives you creatively. Two to three sentences work best here. Placeholder paragraph two. Here you can describe your technical approach, how you collaborate with clients, or what sets your work apart from others in your field.
@@ -546,7 +315,7 @@ export default async function Home() {
               <CornerBracket className="rotate-90" />
               <CornerBracket className="rotate-180" />
             </div>
-          </div>
+          </ScrollDriftLeft>
 
           {/* Portrait column
               Desktop: flex row — "002" label LEFT of portrait, both top-aligned.
@@ -559,12 +328,11 @@ export default async function Home() {
               002
             </span>
             {/* w-[calc(100%+2rem)] + -mx-4 cancels px-4 section padding on mobile for full bleed */}
-            <div
-              className="w-[calc(100%+2rem)] -mx-4 md:w-[436px] md:mx-0 overflow-hidden"
+            <AboutPortrait
+              src={aboutPortrait}
+              className="w-[calc(100%+2rem)] -mx-4 md:w-[436px] md:mx-0"
               style={{ aspectRatio: "436/614" }}
-            >
-              <img src={aboutPortrait} alt="" className="w-full h-full object-cover" />
-            </div>
+            />
           </div>
 
         </div>
@@ -579,17 +347,17 @@ export default async function Home() {
       via object-position on mobile.
     */}
     <section className="w-full overflow-hidden">
-      <div className="relative w-full aspect-[3/4] md:aspect-video">
+      <BlurReveal className="relative w-full aspect-[3/4] md:aspect-video">
         <img
           src="https://www.figma.com/api/mcp/asset/62c7402e-30ef-488e-b4ce-71ee45520f76"
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-[60%_center] md:object-center"
         />
-      </div>
+      </BlurReveal>
     </section>
 
     {/* Services Section */}
-    <section className="bg-black px-4 md:px-8 py-12 md:py-[80px] flex flex-col gap-8 md:gap-12">
+    <section className="bg-black px-4 md:px-8 py-12 md:py-[80px] flex flex-col gap-8 md:gap-12 [--btn-bg:#ffffff] [--btn-fg:#000000]">
 
       {/* [ services ] label */}
       <span className="text-[14px] text-white uppercase leading-[1.1]" style={monoStyle}>
@@ -608,51 +376,20 @@ export default async function Home() {
       {/* Service list */}
       <div className="flex flex-col gap-12 w-full">
         {services.map((svc) => (
-          <div key={svc.num} className="flex flex-col gap-[9px] w-full">
-
-            {/* Number + rule */}
-            <span className="text-[14px] text-white uppercase leading-[1.1]" style={monoStyle}>
-              {svc.num}
-            </span>
-            <hr className="w-full border-t border-white m-0" />
-
-            {/* Content row: desktop justify-between, mobile stacked */}
-            <div className="flex flex-col gap-4 md:flex-row md:flex-wrap md:items-start md:justify-between pt-[9px]">
-
-              {/* Service name */}
-              <p
-                className="text-[36px] text-white font-bold italic leading-[1.1] tracking-[-1.44px] uppercase shrink-0"
-                style={interStyle}
-              >
-                {svc.name}
-              </p>
-
-              {/* Description + image */}
-              <div className="flex flex-col md:flex-row gap-6 items-start">
-                <p
-                  className="text-[14px] text-white leading-[1.3] tracking-[-0.56px] not-italic md:w-[393px]"
-                  style={interStyle}
-                >
-                  {svc.description}
-                </p>
-                <div className="relative size-[151px] shrink-0 overflow-hidden">
-                  <img
-                    src={svc.img}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                  />
-                </div>
-              </div>
-
-            </div>
-          </div>
+          <ServiceItem
+            key={svc.num}
+            num={svc.num}
+            name={svc.name}
+            description={svc.description}
+            img={svc.img}
+          />
         ))}
       </div>
 
     </section>
 
     {/* Selected Work / Portfolio Section */}
-    <section className="px-4 md:px-8 py-12 md:py-[80px]">
+    <section className="bg-white px-4 md:px-8 py-12 md:py-[80px]">
 
       {/* Header */}
       <div className="flex items-start justify-between w-full mb-8 md:mb-[61px]">
@@ -720,58 +457,20 @@ export default async function Home() {
     {/* Testimonials Section */}
 
     {/* MOBILE */}
-    <section className="md:hidden px-4 py-16 flex flex-col gap-8">
+    <section className="md:hidden bg-white px-4 py-16 flex flex-col gap-8">
       <h2
         className="capitalize font-medium not-italic text-black text-[64px] leading-[0.8] tracking-[-4.48px] text-center w-full"
         style={interStyle}
       >
         Testimonials
       </h2>
-      <div className="-mx-4 overflow-x-auto flex items-center pb-2">
-        {testimonials.map((t, i) => (
-          <div
-            key={t.name}
-            className="shrink-0 -mr-[10px]"
-            style={{ transform: `rotate(${i % 2 === 0 ? -3.5 : 2}deg)` }}
-          >
-            <TestimonialCard logo={t.logo} text={t.text} name={t.name} className="w-[260px]" />
-          </div>
-        ))}
+      <div className="-mx-4">
+        <TestimonialsSlider testimonials={testimonials} />
       </div>
     </section>
 
-    {/* DESKTOP */}
-    {/*
-      Section height = 900px at 1440px (62.5vw), matching the Figma frame exactly.
-      Inner container fills section and uses flex justify-center to center h2 with py-[8.33vw] (=120px at 1440px) padding.
-      Cards are absolutely positioned using px values divided by 1440 for vw scaling.
-    */}
-    <section className="hidden md:block relative h-[62.5vw] overflow-hidden">
-      {/* Flex centering shell — matches Figma's flex+justify-center+py-[120px] */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center py-[8.33vw] px-[2.22vw]">
-        <h2
-          className="capitalize font-medium not-italic text-black text-[13.75vw] leading-[1.1] tracking-[-0.07em] text-center w-full"
-          style={{ ...interStyle, zIndex: 1, position: "relative" }}
-        >
-          Testimonials
-        </h2>
-      </div>
-      {/* Absolutely positioned cards — positions from Figma (px / 1440 * 100 = vw) */}
-      {testimonials.map((t) => (
-        <div
-          key={t.name}
-          className="absolute"
-          style={{
-            left: `${(t.left / 1440 * 100).toFixed(2)}vw`,
-            top: `${(t.top / 1440 * 100).toFixed(2)}vw`,
-            transform: `rotate(${t.rotation}deg)`,
-            zIndex: t.behindText ? 0 : 2,
-          }}
-        >
-          <TestimonialCard logo={t.logo} text={t.text} name={t.name} className="w-[24.51vw]" />
-        </div>
-      ))}
-    </section>
+    {/* DESKTOP — parallax testimonials */}
+    <TestimonialsDesktop testimonials={testimonials} />
 
     {/* News / Latest Section */}
     <section className="bg-[#f3f3f3]">
@@ -786,20 +485,7 @@ export default async function Home() {
         </h2>
         <div className="-mx-4 overflow-x-auto flex gap-4 px-4 pb-2">
           {newsItems.map((item, i) => (
-            <div key={i} className="shrink-0 w-[300px] flex flex-col gap-4">
-              <div className="relative w-full h-[398px] overflow-hidden shrink-0">
-                <img src={item.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
-              </div>
-              <p className="text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.56px] not-italic" style={interStyle}>
-                {item.text}
-              </p>
-              <a href="#" className="inline-flex gap-[10px] items-center border-b border-black pb-1 overflow-hidden">
-                <span className="text-[14px] font-medium text-black tracking-[-0.56px] whitespace-nowrap" style={interStyle}>Read more</span>
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden className="-rotate-90 shrink-0">
-                  <path d="M4.5 13.5L13.5 4.5M13.5 4.5H7.5M13.5 4.5V10.5" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-            </div>
+            <NewsCard key={i} img={item.img} text={item.text} className="shrink-0 w-[300px]" imgHeight="h-[398px]" />
           ))}
         </div>
       </div>
@@ -826,20 +512,11 @@ export default async function Home() {
           {newsItems.map((item, i) => (
             <div key={i} className="contents">
               {i > 0 && <div className="self-stretch w-px bg-black shrink-0" />}
-              <div className={`flex-1 flex flex-col gap-4 ${i === 1 ? "pt-[120px] px-[31px]" : i === 0 ? "pr-[31px]" : "pl-[31px]"}`}>
-                <div className="relative w-full h-[469px] overflow-hidden shrink-0">
-                  <img src={item.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                </div>
-                <p className="flex-1 text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.56px] not-italic" style={interStyle}>
-                  {item.text}
-                </p>
-                <a href="#" className="inline-flex gap-[10px] items-center border-b border-black pb-1 overflow-hidden">
-                  <span className="text-[14px] font-medium text-black tracking-[-0.56px] whitespace-nowrap" style={interStyle}>Read more</span>
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden className="-rotate-90 shrink-0">
-                    <path d="M4.5 13.5L13.5 4.5M13.5 4.5H7.5M13.5 4.5V10.5" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-              </div>
+              <NewsCard
+                img={item.img}
+                text={item.text}
+                className={`flex-1 ${i === 1 ? "pt-[120px] px-[31px]" : i === 0 ? "pr-[31px]" : "pl-[31px]"}`}
+              />
             </div>
           ))}
         </div>
@@ -847,138 +524,7 @@ export default async function Home() {
 
     </section>
 
-    {/* Footer */}
-    {/*
-      Mobile (1-492): bg-black, pt-48px px-16px, column layout.
-        Top: CTA phrase + Let's talk button + 4 social links + horizontal divider.
-        Bottom: legal links (centered) + [ Coded By Claude ] + giant H.Studio text.
-      Desktop: 2-column top (CTA+button left, social links right), then divider,
-        then legal row, then full-width H.Studio.
-      H.Studio font size: 91.425px / 375px mobile = 24.38vw scales proportionally.
-    */}
-    <footer className="bg-black overflow-hidden">
-
-      {/* ── MOBILE ── */}
-      <div className="md:hidden px-4 pt-12 flex flex-col gap-12">
-
-        {/* CTA + social + divider */}
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 w-[298px]">
-              <p
-                className="text-white text-[24px] font-light italic leading-[1.1] tracking-[-0.96px] uppercase"
-                style={interStyle}
-              >
-                Have a{" "}
-                <span className="font-black not-italic">project</span>
-                {" "}in mind?
-              </p>
-              <a
-                href="#"
-                className="self-start border border-white text-white text-[14px] font-medium tracking-[-0.56px] px-4 py-3 rounded-full whitespace-nowrap"
-                style={interStyle}
-              >
-                Let&apos;s talk
-              </a>
-            </div>
-            {["Facebook", "Instagram", "X.com", "LinkedIn"].map((link) => (
-              <a
-                key={link}
-                href="#"
-                className="text-white text-[18px] font-normal leading-[1.1] tracking-[-0.72px] uppercase"
-                style={interStyle}
-              >
-                {link}
-              </a>
-            ))}
-          </div>
-          <hr className="border-t border-white w-full m-0" />
-        </div>
-
-        {/* Legal + branding */}
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-[34px] items-center justify-center pb-8">
-            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Licences</a>
-            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Privacy Policy</a>
-          </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-white text-[10px] uppercase leading-[1.1]" style={monoStyle}>[ Coded By Claude ]</span>
-            <p className="text-white font-semibold capitalize leading-[0.8] tracking-[-0.06em] text-[24.38vw]" style={interStyle}>
-              H.Studio
-            </p>
-          </div>
-        </div>
-
-      </div>
-
-      {/* ── DESKTOP ── */}
-      <div className="hidden md:flex flex-col px-8 pt-16">
-
-        {/* Top row: CTA | Facebook+Instagram | X.com+LinkedIn */}
-        <div className="flex items-start justify-between pb-12">
-          <div className="flex flex-col gap-4">
-            <p
-              className="text-white text-[24px] font-light italic leading-[1.1] tracking-[-0.96px] uppercase"
-              style={interStyle}
-            >
-              Have a{" "}
-              <span className="font-black not-italic">project</span>
-              {" "}in mind?
-            </p>
-            <a
-              href="#"
-              className="self-start border border-white text-white text-[14px] font-medium tracking-[-0.56px] px-4 py-3 rounded-full whitespace-nowrap"
-              style={interStyle}
-            >
-              Let&apos;s talk
-            </a>
-          </div>
-          <div className="flex flex-col gap-3">
-            {["Facebook", "Instagram"].map((link) => (
-              <a key={link} href="#" className="text-white text-[18px] font-normal leading-[1.1] tracking-[-0.72px] uppercase hover:opacity-60 transition-opacity" style={interStyle}>
-                {link}
-              </a>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3">
-            {["X.com", "LinkedIn"].map((link) => (
-              <a key={link} href="#" className="text-white text-[18px] font-normal leading-[1.1] tracking-[-0.72px] uppercase hover:opacity-60 transition-opacity" style={interStyle}>
-                {link}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <hr className="border-t border-white w-full m-0" />
-
-        {/* Bottom: rotated label | H.Studio | legal pinned bottom-right */}
-        <div className="relative flex items-end pt-6">
-          {/* [ CODED BY CLAUDE ] rotated -90deg, reads bottom-to-top */}
-          <div className="shrink-0 w-20 self-stretch flex items-center justify-center">
-            <span
-              className="-rotate-90 whitespace-nowrap text-white text-[10px] uppercase leading-[1.1]"
-              style={monoStyle}
-            >
-              [ Coded By Claude ]
-            </span>
-          </div>
-          {/* Giant H.Studio */}
-          <p
-            className="text-white font-semibold capitalize leading-[0.8] tracking-[-0.06em] text-[24.38vw]"
-            style={interStyle}
-          >
-            H.Studio
-          </p>
-          {/* Legal links — absolute bottom-right */}
-          <div className="absolute bottom-2 right-0 flex gap-8 items-center">
-            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Licences</a>
-            <a href="#" className="text-white text-[12px] uppercase tracking-[-0.48px] underline leading-[1.1]" style={interStyle}>Privacy Policy</a>
-          </div>
-        </div>
-
-      </div>
-
-    </footer>
+    <Footer />
     </>
   );
 }

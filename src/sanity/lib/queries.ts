@@ -45,9 +45,26 @@ export const TESTIMONIALS_QUERY = defineQuery(`
 `)
 
 export const NEWS_QUERY = defineQuery(`
-  *[_type == "newsItem"] | order(order asc) {
+  *[_type == "newsItem"] | order(publishedAt desc) {
     _id,
-    "imageUrl": image.asset->url,
+    title,
+    "slug": slug.current,
+    category,
+    publishedAt,
     excerpt,
+    "imageUrl": image.asset->url,
+  }
+`)
+
+export const NEWS_ARTICLE_QUERY = defineQuery(`
+  *[_type == "newsItem" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    category,
+    publishedAt,
+    excerpt,
+    "imageUrl": image.asset->url,
+    body,
   }
 `)

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist_Mono, Inter, Playfair_Display } from "next/font/google";
 import { SanityLive } from "@/sanity/lib/live";
+import { ContactModalProvider } from "./ContactModalContext";
+import ContactModal from "./ContactModal";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -42,8 +44,11 @@ export default function RootLayout({
       className={`${dmSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
-        <SanityLive />
+        <ContactModalProvider>
+          {children}
+          <ContactModal />
+          <SanityLive />
+        </ContactModalProvider>
       </body>
     </html>
   );
